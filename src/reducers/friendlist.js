@@ -3,21 +3,27 @@ import * as types from '../constants/ActionTypes';
 const initialState = {
   friendsById: [
     {
-      name: 'Theodore Roosevelt',
-      starred: true
+      name: 'Catarine Roosevelt',
+      starred: true,
+      gendered: false
     },
     {
       name: 'Abraham Lincoln',
-      starred: false
+      starred: false,
+      gendered: true
     },
     {
       name: 'George Washington',
-      starred: false
+      starred: false,
+      gendered: true
     }
   ]
 };
 
 export default function friends(state = initialState, action) {
+  let friends = [...state.friendsById];
+  let friend = friends.find((item, index) => index === action.id);
+
   switch (action.type) {
     case types.ADD_FRIEND:
       return {
@@ -35,9 +41,13 @@ export default function friends(state = initialState, action) {
         friendsById: state.friendsById.filter((item, index) => index !== action.id)
       };
     case types.STAR_FRIEND:
-      let friends = [...state.friendsById];
-      let friend = friends.find((item, index) => index === action.id);
       friend.starred = !friend.starred;
+      return {
+        ...state,
+        friendsById: friends
+      };
+    case types.GENDER_FRIEND:
+      friend.gendered = !friend.gendered;
       return {
         ...state,
         friendsById: friends
